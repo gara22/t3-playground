@@ -6,6 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
+import Topbar from "../components/Topbar/Topbar";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -14,6 +15,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <ChakraProvider>
       <SessionProvider session={session}>
+        <Topbar />
         <Component {...pageProps} />
       </SessionProvider>
     </ChakraProvider>

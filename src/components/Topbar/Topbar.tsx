@@ -1,11 +1,12 @@
 import { ReactNode } from 'react';
+import Link from 'next/link'
 // import { Link as RouterLink } from "react-router-dom";
 
 import {
   Box,
   Flex,
   Avatar,
-  Link,
+  // Link,
   Button,
   Menu,
   MenuButton,
@@ -19,22 +20,30 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { log } from 'console';
 
 const NavLink = ({ children, to }: { children: ReactNode, to: string }) => (
-  <Link
+  <Box
     px={2}
     py={1}
     rounded={'md'}
     _hover={{
       textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-  >
-    {children}
-  </Link>
+      bg: useColorModeValue('gray.200', 'gray.600'),
+    }}>
+    <Link
+      href={to}
+    >
+      {children}
+    </Link>
+  </Box>
 );
 
 export default function Nav() {
+
+  console.log(useColorModeValue('gray.1000', 'gray.1000'));
+
+
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -45,10 +54,10 @@ export default function Nav() {
           <NavLink to='/'>
             home
           </NavLink>
-          <NavLink to='classrooms'>
+          <NavLink to='/classrooms'>
             classrooms
           </NavLink>
-          <NavLink to='bookings'>
+          <NavLink to='/bookings'>
             bookings
           </NavLink>
           <NavLink to='/admin'>
