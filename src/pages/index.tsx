@@ -69,7 +69,7 @@ const AuthShowcase: React.FC = () => {
     { enabled: sessionData?.user !== undefined },
   );
 
-  const { data: classRooms } = api.example.getAllClassrooms.useQuery(
+  const { data: classRooms } = api.classRoom.getAllClassrooms.useQuery(
     undefined, // no input
     {},
   );

@@ -1,8 +1,19 @@
 import { Card, CardBody, Heading, Spinner, Stack, Text, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 import moment from 'moment';
+import { api } from '../../utils/api';
+
+
 
 export const Bookings = () => {
+
+  // api
+
+  const { data: bookings } = api.booking.getBookings.useQuery(
+  );
+
+  console.log(bookings)
+  // log(bookings)
 
   // const [bookings, setBookings] = useState<Booking[]>([])
 
