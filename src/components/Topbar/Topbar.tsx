@@ -48,8 +48,8 @@ export default function Nav() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
 
-    <Box bg={useColorModeValue('gray.100', 'gray.700')} px={4} width="100%" shadow="md" zIndex={2} >
-      <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+    <Box bg={useColorModeValue('gray.100', 'gray.700')} px={4} shadow="md" zIndex={2} >
+      <Flex h={16} alignItems={'center'} justifyContent={'space-between'} maxWidth='1024px' margin={'auto'}>
         <Flex gap={10}>
           <NavLink to='/'>
             home

@@ -1,60 +1,46 @@
-import { Card, CardBody, Heading, Spinner, Stack, Text, useColorModeValue } from '@chakra-ui/react'
+import { Card, CardBody, CardHeader, Heading, Spinner, Stack, Text, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
 import moment from 'moment';
 import { api } from '../../utils/api';
 
-
-
 export const Bookings = () => {
 
-  // api
 
-  const { data: bookings } = api.booking.getBookings.useQuery(
-  );
+  const { data: bookings } = api.booking.getBookings.useQuery();
+  const { mutate } = api.booking.deleteBooking.useMutation({
+    onSuccess() {
+      console.log('success')
+    }
+  });
 
+
+  const onDelete = (id: string) => {
+
+    mutate(id);
+    //todo refetch bookings after deletion
+  }
   console.log(bookings)
-  // log(bookings)
-
-  // const [bookings, setBookings] = useState<Booking[]>([])
-
-  // console.log('booking render');
-
-  // console.log(albums);
-
-
-
-  // useEffect(() => {
-  //   console.log('useeffeec');
-
-  //   // (async () => {
-  //   getFullBookings().then(fetchedBookings => setBookings(fetchedBookings)).catch(_err => setBookings([]));
-  //   // setBookings(fetchedBookings)
-
-  //   // })()
-
-  // }, [])
 
   const bg = useColorModeValue('gray.200', 'gray.600');
 
   return (
-    <Stack spacing='1'>
+    <Stack spacing='2'>
       <h1>
-        bookingsasdasdasdasdasd
+        my bookings
 
       </h1>
-      {/* {bookings.length > 0 ?
+      {bookings ?
         (bookings.map(b => (
-          <Card bg={bg} key={b._id} size='sm'>
-            <CardHeader>
-            </CardHeader>
+          <Card bg={bg} key={b.id} size='sm'>
             <CardBody>
-              <Heading size='xs' fontSize='xs'>{b.classroom.name}</Heading>
-              <Text fontSize='xs' > {moment(b.from).format('YYYY/\MM/\DD HH:00')} -  {moment(b.to).format('HH:00')} {b.booked_by.name}</Text>
+              <Heading size='xs' fontSize='md'>{b.classRoom.name}</Heading>
+              <Text fontSize='xs' > {moment(b.from).format('YYYY/\MM/\DD HH:00')} -  {moment(b.to).format('HH:00')} {b.booker.name}</Text>
+              <span onClick={() => onDelete(b.id)}>delete</span>
             </CardBody>
           </Card>
         )))
         : <Spinner />
-      } */}
+      }
     </Stack>
   )
 }

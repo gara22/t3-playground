@@ -7,6 +7,7 @@ import { api } from "../utils/api";
 
 import "../styles/globals.css";
 import Topbar from "../components/Topbar/Topbar";
+import { Page } from "../components/Page/Page";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,7 +17,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <ChakraProvider>
       <SessionProvider session={session}>
         <Topbar />
-        <Component {...pageProps} />
+        <Page>
+          <Component {...pageProps} />
+        </Page>
       </SessionProvider>
     </ChakraProvider>
   );
