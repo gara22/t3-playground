@@ -1,7 +1,6 @@
 import React, { forwardRef, useImperativeHandle } from 'react'
 
 import {
-  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -35,8 +34,6 @@ export const BookingForm = forwardRef<SubmitHandle, BookingFormProps>(({ onSubmi
           <FormLabel>Description</FormLabel>
           <Input type="text" {...register('description')} />
         </FormControl>
-        <Flex justifyContent={'space-between'}>
-        </Flex>
       </Stack>
     </form>
 

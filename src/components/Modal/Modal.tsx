@@ -17,11 +17,12 @@ export type ModalProps = {
   onClose: VoidFunction;
   onOpen: VoidFunction;
   onSubmit: VoidFunction;
+  isSubmittable?: boolean;
   title: string;
   btnColor?: string;
 } & PropsWithChildren
 
-export default function CustomModal({ isOpen, onOpen, onClose, children, title, onSubmit }: ModalProps) {
+export default function CustomModal({ isOpen, onOpen, onClose, children, title, onSubmit, isSubmittable = true }: ModalProps) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -39,7 +40,7 @@ export default function CustomModal({ isOpen, onOpen, onClose, children, title, 
         </ModalBody>
 
         <ModalFooter>
-          <Button mr={3} type='submit' onClick={onSubmit}>
+          <Button mr={3} type='submit' onClick={onSubmit} isDisabled={!isSubmittable}>
             Submit
           </Button>
           <Button bg='red.400' _hover={{

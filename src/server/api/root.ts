@@ -10,7 +10,7 @@ import { bookingRouter } from "./routers/booking";
  */
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
-  classRoom: classRoomRouter,
+  classroom: classRoomRouter,
   booking: bookingRouter,
 
 });
