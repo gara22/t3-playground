@@ -33,9 +33,9 @@ export const Classrooms = () => {
       })
       await refetch();
     },
-    onError: () => {
+    onError: (err) => {
       toast({
-        title: 'Something went wrong.',
+        title: err.message,
         description: "Couldn't delete classroom",
         status: 'error',
         duration: 5000,
@@ -55,9 +55,9 @@ export const Classrooms = () => {
       })
       await refetch();
     },
-    onError: () => {
+    onError: (err) => {
       toast({
-        title: 'Something went wrong.',
+        title: err.message,
         description: "Couldn't create classroom",
         status: 'error',
         duration: 5000,

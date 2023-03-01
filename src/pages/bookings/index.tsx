@@ -24,6 +24,7 @@ export const Bookings = () => {
   const { data: bookings = [], isLoading, refetch } = api.booking.getBookings.useQuery();
   const { mutate: deleteBooking } = api.booking.deleteBooking.useMutation({
     onSuccess: async () => {
+      //TODO: add toast messages here
       console.log('success delete')
       await refetch();
     },
@@ -31,6 +32,7 @@ export const Bookings = () => {
 
   const { mutate: createBooking } = api.booking.createBooking.useMutation({
     onSuccess: async () => {
+      //TODO: add toast messages here
       console.log('success create')
       await refetch();
     },
