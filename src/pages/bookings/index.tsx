@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Flex, Heading, Spinner, Stack, Text, useColorModeValue, useDisclosure } from '@chakra-ui/react'
+import { Button, Card, CardBody, Flex, Heading, Spinner, Stack, Text, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react'
 import React, { useRef, useState } from 'react'
 import moment from 'moment';
 import { api } from '../../utils/api';
@@ -14,6 +14,8 @@ export const Bookings = () => {
   const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } = useDisclosure();
 
   const [selectedBookingId, setSelectedBookingId] = useState('');
+  const toast = useToast()
+
 
   const createBookingRef = useRef<SubmitHandle>(null);
   const deleteBookingRef = useRef<DeleteHandle>(null);
@@ -24,16 +26,26 @@ export const Bookings = () => {
   const { data: bookings = [], isLoading, refetch } = api.booking.getBookings.useQuery();
   const { mutate: deleteBooking } = api.booking.deleteBooking.useMutation({
     onSuccess: async () => {
-      //TODO: add toast messages here
-      console.log('success delete')
+      toast({
+        title: 'Booking deleted.',
+        description: "Booking deleted successfully",
+        status: 'info',
+        duration: 5000,
+        isClosable: true,
+      })
       await refetch();
     },
   });
 
   const { mutate: createBooking } = api.booking.createBooking.useMutation({
     onSuccess: async () => {
-      //TODO: add toast messages here
-      console.log('success create')
+      toast({
+        title: 'Booking created.',
+        description: "Booking created successfully",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
       await refetch();
     },
   });

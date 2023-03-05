@@ -27,7 +27,7 @@ export const Classrooms = () => {
       toast({
         title: 'Classroom deleted.',
         description: "Classroom deleted successfully",
-        status: 'success',
+        status: 'info',
         duration: 5000,
         isClosable: true,
       })
