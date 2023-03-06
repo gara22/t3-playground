@@ -13,10 +13,10 @@ import { useState } from "react";
 
 const Home: NextPage = () => {
 
-  const [inputs, setInputs] = useState<{ from: Date; to: Date; hasComputer: boolean }>({ to: new Date(), from: new Date(), hasComputer: false })
+  // const [inputs, setInputs] = useState<{ from: Date; to: Date; hasComputer: boolean }>({ to: new Date(), from: new Date(), hasComputer: false })
 
   //TODO: figure out how this works without usestate and shit
-  const { data: rooms = [], isLoading, refetch } = api.classroom.getFreeClassrooms.useQuery(inputs, { enabled: true })
+  // const { data: rooms = [], isLoading, refetch } = api.classroom.getFreeClassrooms.useQuery(inputs, { enabled: true })
 
 
   const onQuery = (data: { day: Date; time: number; hasComputer: boolean }) => {
@@ -32,9 +32,9 @@ const Home: NextPage = () => {
       to,
       hasComputer
     }
-    setInputs(bookingData);
+    // setInputs(bookingData);
 
-    console.log(inputs);
+    // console.log(inputs);
 
     // const res = api.classroom.getFreeClassrooms.useQuery(bookingData);
 
