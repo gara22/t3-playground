@@ -12,22 +12,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { Booking, Classroom } from '@prisma/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-const timeIntervals = [
-  { view: '8:00 - 9:00', time: 8 },
-  { view: '9:00 - 10:00', time: 9 },
-  { view: '10:00 - 11:00', time: 10 },
-  { view: '11:00 - 12:00', time: 11 },
-  { view: '12:00 - 13:00', time: 12 },
-  { view: '13:00 - 14:00', time: 13 },
-  { view: '14:00 - 15:00', time: 14 },
-  { view: '15:00 - 16:00', time: 15 },
-  { view: '16:00 - 17:00', time: 16 },
-  { view: '17:00 - 18:00', time: 17 },
-  { view: '18:00 - 19:00', time: 18 },
-  { view: '19:00 - 20:00', time: 19 },
-  { view: '20:00 - 21:00', time: 20 },
-];
+import { TIME_INTERVALS } from '../../utils/constants';
 
 const schema = z.object({
   classroomId: z.string().min(1, {
@@ -82,7 +67,7 @@ export const BookingForm = forwardRef<SubmitHandle, BookingFormProps>(({ onSubmi
           <FormLabel>time</FormLabel>
           <Select placeholder='Select option'  {...register('time')}>
             {
-              timeIntervals.map(({ view, time }) => (
+              TIME_INTERVALS.map(({ view, time }) => (
                 <option key={time} value={time}>{view}</option>
               ))
             }

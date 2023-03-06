@@ -32,15 +32,69 @@ export const classRoomRouter = createTRPCRouter({
       })
     }),
 
-  // getFreeClassrooms: publicProcedure
-  //   .input(z.object({
-  //     from: z.date(),
-  //     to: z.date(),
-  //     hasComputer: z.boolean(),
-  //   }))
-  // .query(({ input, ctx }) => {
-  //   return ctx.prisma.classroom.findMany({
-      
-  //   })
-  // }),
+  getFreeClassrooms: publicProcedure
+    .input(z.object({
+      from: z.date(),
+      to: z.date(),
+      hasComputer: z.boolean(),
+    }))
+    .query(({ input, ctx }) => {
+      console.log(input.from);
+
+      return ctx.prisma.classroom.findMany({
+        include: {
+          bookings: {
+            where: {
+              OR: [
+                {
+                  AND: [
+                    {
+                      from: {
+                        gt: input.from
+                      },
+
+                    },
+                    {
+                      from: {
+                        lt: input.to
+                      }
+                    }
+                  ]
+                },
+                {
+                  AND: [
+                    {
+                      to: {
+                        gt: input.from
+                      },
+
+                    },
+                    {
+                      to: {
+                        lt: input.to
+                      }
+                    }
+                  ]
+                },
+                {
+                  AND: [
+                    {
+                      from: {
+                        lte: input.from
+                      },
+
+                    },
+                    {
+                      to: {
+                        gte: input.to
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      })
+    }),
 });

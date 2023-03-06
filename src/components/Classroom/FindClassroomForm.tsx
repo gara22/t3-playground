@@ -8,51 +8,63 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  Select,
   Stack,
   Switch,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { Classroom } from '@prisma/client';
+import { TIME_INTERVALS } from '../../utils/constants';
 
 const schema = z.object({
-  name: z.string().min(3).max(20),
-  capacity: z.coerce.number().int().positive().max(50),
-  hasComputer: z.boolean(),
+  // classroomId: z.string().min(1, {
+  //   message: "Must choose classroom!",
+  // }),
+  day: z.coerce.date(),
+  time: z.coerce.number().min(1, {
+    message: "Must choose time!",
+  }),
+  hasComputer: z.boolean()
 });
 
-// export type ClassroomFormProps = {
-//   onSubmit: (data: Pick<Classroom, 'name' | 'capacity' | 'hasComputer'>) => void;
-// }
+export type findClassroomFormProps = {
+  onSubmit: (data: { day: Date; time: number; hasComputer: boolean }) => void;
+}
 
-export const FindClassroomForm = () => {
-  const { register, handleSubmit, formState: { errors, isValid } } = useForm<{ day: Date; time: string; hasComputer: boolean }>({
+export const FindClassroomForm = ({ onSubmit }: findClassroomFormProps) => {
+  const { register, handleSubmit, formState: { errors } } = useForm<{ day: Date; time: number; hasComputer: boolean }>({
     resolver: zodResolver(schema),
     mode: 'onTouched',
   });
 
   return (
 
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={6}>
-        <FormControl id="day">
-          <FormLabel>date</FormLabel>
+        <FormControl id="day" isInvalid={!!errors.day}>
+          <FormLabel>day</FormLabel>
           <Input
             placeholder="Select Date and Time"
             size="md"
             type='date'
             {...register('day')}
           />
-          {/* <FormErrorMessage>{errors.name?.message}</FormErrorMessage> */}
+          <FormErrorMessage>{errors.day?.message}</FormErrorMessage>
         </FormControl>
-        {/* //TODO: dropdown for time */}
-        <FormControl isInvalid={!!errors.time} id="capacity">
-          <FormLabel>Capacity</FormLabel>
-          <Input type="number" {...register('time')} />
-          {/* {errors.capacity && <FormErrorMessage>{errors.capacity.message}</FormErrorMessage>} */}
+        <FormControl id="time" isInvalid={!!errors.time}>
+          <FormLabel>time</FormLabel>
+          <Select placeholder='Select option'  {...register('time')}>
+            {
+              TIME_INTERVALS.map(({ view, time }) => (
+                <option key={time} value={time}>{view}</option>
+              ))
+            }
+          </Select>
+          <FormErrorMessage>{errors.time?.message}</FormErrorMessage>
         </FormControl>
         <FormControl id="hasComputer">
           <FormLabel>Has computers?</FormLabel>
-          <Switch id='email-alerts' {...register('hasComputer')} />
+          <Switch id='hasComputer' {...register('hasComputer')} />
         </FormControl>
         <Button type='submit'>
           search

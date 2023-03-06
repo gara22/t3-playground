@@ -55,8 +55,8 @@ export const Bookings = () => {
     onCloseCreate();
     const { description, classroomId, day, time } = data;
     //TODO: convert time to number in bookingform
-    const from = moment(day).add(Number(time), 'hours').toDate();
-    const to = moment(day).add(Number(time) + 1, 'hours').toDate();
+    const from = moment(day).add((Number(time) - 1), 'hours').toDate();
+    const to = moment(day).add(Number(time), 'hours').toDate();
 
     const bookingData = {
       from,
