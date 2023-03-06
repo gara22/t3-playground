@@ -2,7 +2,7 @@ import { Button, Card, CardBody, Flex, Heading, Spinner, Stack, Text, useColorMo
 import React, { useRef, useState } from 'react'
 import moment from 'moment';
 import { api } from '../../utils/api';
-import BookingForm, { SubmitHandle } from '../../components/Booking/BookingForm';
+import BookingForm, { BookingFormValues, SubmitHandle } from '../../components/Booking/BookingForm';
 import { Booking } from '@prisma/client';
 import { DeleteIcon } from '@chakra-ui/icons';
 import CustomModal from '../../components/Modal/Modal';
@@ -24,6 +24,7 @@ export const Bookings = () => {
 
   //TODO: fetching runs unnecessarily when either creating or deleting
   const { data: bookings = [], isLoading, refetch } = api.booking.getBookings.useQuery();
+  const { data: classrooms = [] } = api.classroom.getAllClassrooms.useQuery();
   const { mutate: deleteBooking } = api.booking.deleteBooking.useMutation({
     onSuccess: async () => {
       toast({
@@ -50,10 +51,21 @@ export const Bookings = () => {
     },
   });
 
-  const onCreate = (data: Pick<Booking, 'description'>) => {
-    onCloseCreate()
-    const { description } = data;
-    createBooking({ description: description || '' });
+  const onCreate = (data: BookingFormValues) => {
+    onCloseCreate();
+    const { description, classroomId, day, time } = data;
+    //TODO: convert time to number in bookingform
+    const from = moment(day).add(Number(time), 'hours').toDate();
+    const to = moment(day).add(Number(time) + 1, 'hours').toDate();
+
+    const bookingData = {
+      from,
+      to,
+      classroomId,
+      description: description || '',
+    }
+
+    createBooking(bookingData);
   }
 
 
@@ -77,7 +89,7 @@ export const Bookings = () => {
           (bookings.map(b => (
             <Card bg={bg} key={b.id} size='sm'>
               <CardBody>
-                <Heading size='xs' fontSize='md'>{b.classRoom.name}</Heading>
+                <Heading size='xs' fontSize='md'>{b.classroom.name}</Heading>
                 <Flex justifyContent='space-between' alignItems='center'>
                   <Flex gap='10px'>
                     <Text fontSize='xs' > {moment(b.from).format('YYYY/\MM/\DD HH:00')} -  {moment(b.to).format('HH:00')} {b.booker.name}</Text>
@@ -91,7 +103,7 @@ export const Bookings = () => {
         }
       </Stack>
       <CustomModal title='Create Booking' isOpen={isOpenCreate} onOpen={onOpenCreate} onClose={onCloseCreate} onSubmit={() => createBookingRef.current?._submit()} >
-        <BookingForm onSubmit={onCreate} ref={createBookingRef} />
+        <BookingForm onSubmit={onCreate} ref={createBookingRef} classrooms={classrooms.map(c => ({ id: c.id, name: c.name }))} />
       </CustomModal>
       <CustomModal title='Delete Booking' isOpen={isOpenDelete} onOpen={onOpenDelete} onClose={() => { setSelectedBookingId(''); onCloseDelete() }} onSubmit={() => deleteBookingRef.current?._delete()}>
         <DeleteBooking onDelete={onDelete} bookingId={selectedBookingId} ref={deleteBookingRef} />

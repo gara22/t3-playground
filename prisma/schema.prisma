@@ -84,7 +84,7 @@ model Booking {
   to          DateTime
   booker      User      @relation(fields: [bookerId], references: [id])
   bookerId    String
-  classRoom   Classroom @relation(fields: [classRoomId], references: [id])
-  classRoomId String
+  classroom   Classroom @relation(fields: [classroomId], references: [id])
+  classroomId String
   description String?
 }

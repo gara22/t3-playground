@@ -23,6 +23,7 @@ export const classRoomRouter = createTRPCRouter({
         }
       })
     }),
+
   deleteClassroom: protectedProcedure
     .input(z.string())
     .mutation(({ input, ctx }) => {
@@ -30,4 +31,16 @@ export const classRoomRouter = createTRPCRouter({
         where: { id: input }
       })
     }),
+
+  // getFreeClassrooms: publicProcedure
+  //   .input(z.object({
+  //     from: z.date(),
+  //     to: z.date(),
+  //     hasComputer: z.boolean(),
+  //   }))
+  // .query(({ input, ctx }) => {
+  //   return ctx.prisma.classroom.findMany({
+      
+  //   })
+  // }),
 });

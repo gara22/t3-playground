@@ -6,7 +6,7 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 //find a more elegant way for extending prisma types
 export type BookingWithAllData = {
   booker: Pick<User, 'name'>,
-  classRoom: Classroom
+  classroom: Classroom
 } & Booking
 
 export const bookingRouter = createTRPCRouter({
@@ -19,7 +19,7 @@ export const bookingRouter = createTRPCRouter({
           select: {
             name: true,
           }
-        }, classRoom: true
+        }, classroom: true
       }
     })
   }),
@@ -33,16 +33,26 @@ export const bookingRouter = createTRPCRouter({
     }),
 
   createBooking: protectedProcedure
-    .input(z.object({ description: z.string() }))
+    .input(z.object({ from: z.date(), to: z.date(), classroomId: z.string(), description: z.string() }))
     .mutation(({ input, ctx }) => {
       return ctx.prisma.booking.create({
         data: {
-          from: new Date(),
-          to: new Date(),
+          from: input.from,
+          to: input.to,
           bookerId: ctx.session.user.id,
-          classRoomId: 'cldrz1ktg0000unn4cajswhbm',
+          classroomId: input.classroomId,
           description: input.description,
         }
       })
     }),
+
+  // isAvailableAt: protectedProcedure
+  //   .input(z.object({ classroomId: z.string(), from: z.date(), to: z.date() }))
+  //   .query(({input, ctx }) => {
+  //     return ctx.prisma.booking.findMany()
+  //   }),
 });
+//TODO: figure out how to export queries
+// export const isAvailableAt = (from: Date, to: Date, classroomId: string, ctx) => {
+
+// }

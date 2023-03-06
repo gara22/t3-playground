@@ -30,8 +30,6 @@ export const FindClassroomForm = () => {
     mode: 'onTouched',
   });
 
-  //TODO: this
-
   return (
 
     <form>
