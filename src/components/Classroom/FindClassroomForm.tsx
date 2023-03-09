@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from 'react'
+import React, { } from 'react'
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -13,7 +13,6 @@ import {
   Switch,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { Classroom } from '@prisma/client';
 import { TIME_INTERVALS } from '../../utils/constants';
 
 const schema = z.object({
@@ -43,6 +42,7 @@ export const FindClassroomForm = ({ onSubmit }: findClassroomFormProps) => {
       <Stack spacing={6}>
         <FormControl id="day" isInvalid={!!errors.day}>
           <FormLabel>day</FormLabel>
+          {/* TODO: add default value to date input */}
           <Input
             placeholder="Select Date and Time"
             size="md"

@@ -1,22 +1,16 @@
-import styles from "./index.module.css";
 import { type NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
 
 import { api } from "../utils/api";
-import Topbar from "../components/Topbar/Topbar";
-import { log } from "console";
-import { Input } from "@chakra-ui/react";
 import FindClassroomForm from "../components/Classroom/FindClassroomForm";
 import moment from "moment";
 import { useState } from "react";
+import { SimpleGrid, Card, Heading, CardBody, Button, Text, Spinner, Flex, ListItem, UnorderedList } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
 
-  // const [inputs, setInputs] = useState<{ from: Date; to: Date; hasComputer: boolean }>({ to: new Date(), from: new Date(), hasComputer: false })
+  const [inputs, setInputs] = useState<{ from: Date; to: Date; hasComputer: boolean; enabled: boolean }>({ to: new Date(), from: new Date(), hasComputer: false, enabled: false })
 
-  //TODO: figure out how this works without usestate and shit
-  // const { data: rooms = [], isLoading, refetch } = api.classroom.getFreeClassrooms.useQuery(inputs, { enabled: true })
+  const { data: rooms = [], isLoading, isFetching } = api.classroom.getFreeClassrooms.useQuery({ from: inputs.from, to: inputs.to, hasComputer: inputs.hasComputer }, { enabled: inputs.enabled, refetchOnWindowFocus: false, onSuccess: () => console.log('success') })
 
 
   const onQuery = (data: { day: Date; time: number; hasComputer: boolean }) => {
@@ -30,25 +24,38 @@ const Home: NextPage = () => {
     const bookingData = {
       from,
       to,
-      hasComputer
+      hasComputer,
+      enabled: true,
     }
-    // setInputs(bookingData);
-
-    // console.log(inputs);
-
-    // const res = api.classroom.getFreeClassrooms.useQuery(bookingData);
-
-    // console.log(res)
-
-    // createBooking(bookingData);
+    setInputs(bookingData);
   }
 
 
   return (
     <>
-      <main>
+      <Flex as={'main'} direction='column' gap='30px'>
         <FindClassroomForm onSubmit={onQuery} />
-      </main>
+        <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
+          {/* TODO: don't show spinner when not fetching/loading */}
+          {(isFetching || isLoading) ? <Spinner /> :
+            rooms.map(r => (
+              //TODO add color for light mode too
+              <Card bg='gray.600' key={r.id}>
+                <CardBody>
+                  <Heading size='md'>{r.name}</Heading>
+                  <Text fontSize='xs'> {moment(inputs.from).format('YYYY/\MM/\DD HH:00')} -  {moment(inputs.to).format('HH:00')}</Text>
+                  <UnorderedList fontSize='sm' paddingLeft='10px' paddingTop='10px'>
+                    <ListItem>Capacity: {r.capacity}</ListItem>
+                    <ListItem>Has computers:  {r.hasComputer ? 'Yes' : 'No'}</ListItem>
+                  </UnorderedList>
+                </CardBody>
+                <Button>View here</Button>
+              </Card>
+
+            ))
+          }
+        </SimpleGrid>
+      </Flex>
     </>
   );
 };

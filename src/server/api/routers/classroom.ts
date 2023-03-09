@@ -38,10 +38,12 @@ export const classRoomRouter = createTRPCRouter({
       to: z.date(),
       hasComputer: z.boolean(),
     }))
-    .query(({ input, ctx }) => {
-      console.log(input.from);
+    .query(async ({ input, ctx }) => {
 
-      return ctx.prisma.classroom.findMany({
+      const classrooms = await ctx.prisma.classroom.findMany({
+        where: {
+          hasComputer: input.hasComputer,
+        },
         include: {
           bookings: {
             where: {
@@ -96,5 +98,7 @@ export const classRoomRouter = createTRPCRouter({
           }
         }
       })
+      //TODO: maybe find a more efficient way to filter, but its okay for now.
+      return classrooms.filter(r => r.bookings.length === 0)
     }),
 });
