@@ -7,6 +7,12 @@ export const classRoomRouter = createTRPCRouter({
   getAllClassrooms: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.classroom.findMany()
   }),
+  getClassroomById: publicProcedure
+    .input(z.object({
+      id: z.string(),
+    })).query(({ input, ctx }) => {
+      return ctx.prisma.classroom.findFirst({ where: { id: input.id } })
+    }),
 
   createClassroom: protectedProcedure
     .input(z.object({

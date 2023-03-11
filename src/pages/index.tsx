@@ -5,6 +5,7 @@ import FindClassroomForm from "../components/Classroom/FindClassroomForm";
 import moment from "moment";
 import { useState } from "react";
 import { SimpleGrid, Card, Heading, CardBody, Button, Text, Spinner, Flex, ListItem, UnorderedList } from "@chakra-ui/react";
+import Link from "next/link";
 
 const Home: NextPage = () => {
 
@@ -49,7 +50,11 @@ const Home: NextPage = () => {
                     <ListItem>Has computers:  {r.hasComputer ? 'Yes' : 'No'}</ListItem>
                   </UnorderedList>
                 </CardBody>
-                <Button>View here</Button>
+                <Button>
+                  <Link href={`/classrooms/${r.id}`}>
+                    View here
+                  </Link>
+                </Button>
               </Card>
 
             ))
