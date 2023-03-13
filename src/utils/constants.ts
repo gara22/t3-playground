@@ -13,3 +13,6 @@ export const TIME_INTERVALS = [
   { view: '19:00 - 20:00', time: 19 },
   { view: '20:00 - 21:00', time: 20 },
 ];
+export const START_HOUR = 8;
+export const END_HOUR = 20;
+export const LENGTH_OF_WEEK = 5;

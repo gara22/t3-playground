@@ -23,7 +23,7 @@ export const Bookings = () => {
 
 
   //TODO: fetching runs unnecessarily when either creating or deleting
-  const { data: bookings = [], isLoading, refetch } = api.booking.getBookings.useQuery();
+  const { data: bookings = [], isLoading, refetch } = api.booking.getBookingsOfUser.useQuery();
   const { data: classrooms = [] } = api.classroom.getAllClassrooms.useQuery();
   const { mutate: deleteBooking } = api.booking.deleteBooking.useMutation({
     onSuccess: async () => {

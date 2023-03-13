@@ -7,11 +7,13 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 export type BookingWithAllData = {
   booker: Pick<User, 'name'>,
   classroom: Classroom
-} & Booking
+} & Booking;
+
+export type BookingWithBooker = Omit<BookingWithAllData, 'classroom'>;
 
 export const bookingRouter = createTRPCRouter({
 
-  getBookings: protectedProcedure.query<BookingWithAllData[]>(({ ctx }) => {
+  getBookingsOfUser: protectedProcedure.query<BookingWithAllData[]>(({ ctx }) => {
     return ctx.prisma.booking.findMany({
       where: { bookerId: ctx.session.user.id },
       include: {
@@ -23,6 +25,30 @@ export const bookingRouter = createTRPCRouter({
       }
     })
   }),
+
+  getBookingsOfClassroom: publicProcedure
+    .input(z.object({ classroomId: z.string(), from: z.date(), to: z.date() }))
+    .query<BookingWithBooker[]>(({ input, ctx }) => {
+      //TODO: check date conversion cuz it looks buggy -> see log statetemtn below
+      console.log(input);
+
+      return ctx.prisma.booking.findMany({
+        where: {
+          classroomId: input.classroomId, from: {
+            gte: input.from
+          }, to: {
+            lte: input.to
+          }
+        },
+        include: {
+          booker: {
+            select: {
+              name: true,
+            }
+          }
+        }
+      })
+    }),
 
   deleteBooking: protectedProcedure
     .input(z.string())
