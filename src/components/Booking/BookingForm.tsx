@@ -54,8 +54,6 @@ export const BookingForm = forwardRef<SubmitHandle, BookingFormProps>(({ onSubmi
     }
   }));
 
-  console.log(getValues())
-
   return (
 
     <form>
