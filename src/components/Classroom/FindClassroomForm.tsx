@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { TIME_INTERVALS } from '../../utils/constants';
+import moment from 'moment';
 
 const schema = z.object({
   // classroomId: z.string().min(1, {
@@ -26,14 +27,18 @@ const schema = z.object({
   hasComputer: z.boolean()
 });
 
-export type findClassroomFormProps = {
+export type FindClassroomFormProps = {
   onSubmit: (data: { day: Date; time: number; hasComputer: boolean }) => void;
 }
 
-export const FindClassroomForm = ({ onSubmit }: findClassroomFormProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<{ day: Date; time: number; hasComputer: boolean }>({
+export const FindClassroomForm = ({ onSubmit }: FindClassroomFormProps) => {
+  const { register, handleSubmit, formState: { errors }, getValues } = useForm<{ day: Date; time: number; hasComputer: boolean }>({
     resolver: zodResolver(schema),
     mode: 'onTouched',
+    defaultValues: {
+      day: moment(new Date).format('YYYY-MM-DD').toString() as unknown as Date,
+      time: 8,
+    }
   });
 
   return (

@@ -16,11 +16,10 @@ const Home: NextPage = () => {
 
   const onQuery = (data: { day: Date; time: number; hasComputer: boolean }) => {
     const { day, time, hasComputer } = data;
-    console.log(time)
     //TODO: convert time to number in bookingform
-    //TODO: investigate time zones. why do we need -1? 
-    const from = moment(day).add(Number(time) - 1, 'hours').toDate();
-    const to = moment(day).add(Number(time), 'hours').toDate();
+    //TODO: investigate time zones. why do we need -2? 
+    const from = moment(day).add(Number(time) - 2, 'hours').toDate();
+    const to = moment(day).add(Number(time) - 1, 'hours').toDate();
 
     const bookingData = {
       from,
