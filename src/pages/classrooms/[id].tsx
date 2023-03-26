@@ -15,7 +15,7 @@ const ClassroomShow = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [currentWeekStartingDate, setCurrentWeekStartingDate] = useState<Date>(moment(new Date()).startOf('isoWeek').toDate());
   const { query: { id } } = useRouter();
-  const { data: classroom, isLoading, refetch } = api.classroom.getClassroomById.useQuery({ id });
+  const { data: classroom, isLoading, refetch } = api.classroom.getClassroomById.useQuery({ id } as { id: string });
 
   const { isOpen: isOpenCreate, onOpen: onOpenCreate, onClose: onCloseCreate } = useDisclosure();
   const days = getDays(currentWeekStartingDate, LENGTH_OF_WEEK);
