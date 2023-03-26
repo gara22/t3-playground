@@ -6,7 +6,7 @@ import { BookingWithBooker } from '../../server/api/routers/booking';
 import { END_HOUR, START_HOUR } from '../../utils/constants';
 import { getHourOfDay, getHoursInterval, getNameOfDay } from '../../utils/dates';
 
-export const Calendar = ({ days, onCellClick, bookings = [] }: { days: Date[]; onCellClick: (date: Date) => void, bookings: BookingWithBooker[] }) => {
+export const Calendar = ({ days, onCellClick, bookings = [] }: { days: Date[]; onCellClick: (date: Date, bookingId?: string) => void, bookings: BookingWithBooker[] }) => {
 
   const hourInterval = getHoursInterval(START_HOUR, END_HOUR);
 
@@ -37,7 +37,7 @@ export const Calendar = ({ days, onCellClick, bookings = [] }: { days: Date[]; o
         {days.map(day => <HeaderCell key={moment(day).format('MM/dd')}><><span>{moment(day).format('dddd')}</span> <span>{moment(day).format('MM/DD')}</span></></HeaderCell>)}
         {hourInterval.map((hour, idx) => (<Cell bg='gray.700' gridColumn={1} gridRow={idx + 2} key={hour}>{`${hour}:00 - ${hour + 1}:00`}</Cell>))}
         {daysWithBookings.map(day => (
-          <BookingCell booking={day.booking} onClick={() => onCellClick(day.date)} key={` ${getNameOfDay(day.date)} + ${getHourOfDay(day.date)}`} date={day.date}>
+          <BookingCell booking={day.booking} onClick={() => onCellClick(day.date, day.booking?.id)} key={` ${getNameOfDay(day.date)} + ${getHourOfDay(day.date)}`} date={day.date}>
             <>
               <span>
                 {day.booking ? day.booking.booker.name : 'free'}

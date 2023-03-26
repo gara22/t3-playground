@@ -34,18 +34,26 @@ export type SubmitHandle = {
 export type BookingFormProps = {
   onSubmit: (data: BookingFormValues) => void;
   classrooms: Pick<Classroom, 'id' | 'name'>[];
+  isEdit?: boolean;
   defaultValues?: {
     classroomId: string;
     date: Date;
+    description?: string; 
   }
 }
 //TODO: maybe find a better solution for date and time handling
 export type BookingFormValues = Pick<Booking, 'description' | 'classroomId'> & { day: Date, time: number }
 
-export const BookingForm = forwardRef<SubmitHandle, BookingFormProps>(({ onSubmit, classrooms, defaultValues }, ref) => {
+export const BookingForm = forwardRef<SubmitHandle, BookingFormProps>(({ onSubmit, classrooms, defaultValues, isEdit = false }, ref) => {
   const { register, handleSubmit, formState: { errors }, getValues } = useForm<BookingFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues ? { classroomId: defaultValues?.classroomId, time: getHourOfDay(defaultValues?.date), day: moment(defaultValues.date).format('YYYY-MM-DD') as unknown as Date } : {}
+    defaultValues: defaultValues ? {
+      classroomId: defaultValues?.classroomId,
+      time: getHourOfDay(defaultValues?.date),
+      day: moment(defaultValues.date).format('YYYY-MM-DD') as unknown as Date,
+      description: defaultValues.description ?? '',
+
+    } : {}
   });
 
   useImperativeHandle(ref, () => ({
@@ -58,7 +66,8 @@ export const BookingForm = forwardRef<SubmitHandle, BookingFormProps>(({ onSubmi
 
     <form>
       <Stack spacing={6}>
-        <FormControl id="day" isInvalid={!!errors.day} isDisabled={!!defaultValues?.date}>
+        {/* TODO: possibly make editing work on day/time */}
+        <FormControl id="day" isInvalid={!!errors.day} isDisabled={!!defaultValues?.date && (!isEdit || true)}>
           <FormLabel>day</FormLabel>
           <Input
             placeholder="Select Date and Time"
@@ -68,7 +77,7 @@ export const BookingForm = forwardRef<SubmitHandle, BookingFormProps>(({ onSubmi
           />
           <FormErrorMessage>{errors.day?.message}</FormErrorMessage>
         </FormControl>
-        <FormControl id="time" isInvalid={!!errors.time} isDisabled={!!defaultValues?.date}>
+        <FormControl id="time" isInvalid={!!errors.time} isDisabled={!!defaultValues?.date && (!isEdit || true)}>
           <FormLabel>time</FormLabel>
           <Select placeholder='Select option'  {...register('time')}>
             {

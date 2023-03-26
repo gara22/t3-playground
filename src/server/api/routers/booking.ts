@@ -72,6 +72,22 @@ export const bookingRouter = createTRPCRouter({
       })
     }),
 
+  editBooking: protectedProcedure
+    .input(z.object({ from: z.date().optional(), to: z.date().optional(), classroomId: z.string().optional(), description: z.string().optional(), id: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.booking.update({
+        where: {
+          id: input.id
+        },
+        data: {
+          from: input.from,
+          to: input.to,
+          bookerId: ctx.session.user.id,
+          classroomId: input.classroomId,
+          description: input.description,
+        }
+      })
+    }),
   // isAvailableAt: protectedProcedure
   //   .input(z.object({ classroomId: z.string(), from: z.date(), to: z.date() }))
   //   .query(({input, ctx }) => {
