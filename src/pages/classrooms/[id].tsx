@@ -7,7 +7,7 @@ import BookingForm, { BookingFormValues, SubmitHandle } from '../../components/B
 import { Calendar } from '../../components/Calendar/Calendar'
 import CustomModal from '../../components/Modal/Modal';
 import { api } from '../../utils/api';
-import { LENGTH_OF_WEEK } from '../../utils/constants';
+import { LENGTH_OF_WEEK, UTC_OFFSET } from '../../utils/constants';
 import { addDays, getDays, subtractDays } from '../../utils/dates';
 
 
@@ -60,7 +60,7 @@ const ClassroomShow = () => {
     onCloseCreate();
     const { description, classroomId, day, time } = data;
     //TODO: convert time to number in bookingform
-    const from = moment(day).add((Number(time) - 1), 'hours').toDate();
+    const from = moment(day).add((Number(time) - UTC_OFFSET), 'hours').toDate();
     const to = moment(day).add(Number(time), 'hours').toDate();
 
     const bookingData = {
@@ -77,7 +77,7 @@ const ClassroomShow = () => {
     onCloseEdit();
     const { description, classroomId, day, time } = data;
     //TODO: convert time to number in bookingform
-    const from = moment(day).add((Number(time) - 1), 'hours').toDate();
+    const from = moment(day).add((Number(time) - UTC_OFFSET), 'hours').toDate();
     const to = moment(day).add(Number(time), 'hours').toDate();
 
     const bookingData = {

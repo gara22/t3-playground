@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const TIME_INTERVALS = [
   { view: '8:00 - 9:00', time: 8 },
   { view: '9:00 - 10:00', time: 9 },
@@ -16,3 +18,4 @@ export const TIME_INTERVALS = [
 export const START_HOUR = 8;
 export const END_HOUR = 20;
 export const LENGTH_OF_WEEK = 5;
+export const UTC_OFFSET = moment().utcOffset() / 60;
